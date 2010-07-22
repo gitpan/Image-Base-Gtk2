@@ -26,7 +26,7 @@ use base 'Image::Base::Gtk2::Gdk::Drawable';
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 1;
+our $VERSION = 2;
 
 sub new {
   my ($class, %params) = @_;
@@ -68,7 +68,7 @@ sub new {
     $for_drawable
       ||= ($for_widget && $for_widget->window)
         || ($screen && $screen->get_default_root_window)
-          || Gtk2::Gdk->get_default_root_window;;
+          || Gtk2::Gdk->get_default_root_window;
 
     if (! exists $params{'-colormap'}) {
       if (my $default_colormap
@@ -145,7 +145,8 @@ sub _drawable_clone_to_pixmap {
 1;
 __END__
 
-=for stopwords undef Ryde Gdk Pixmaps pixmap colormap ie toplevel
+=for stopwords Ryde Gtk Gdk Pixmaps pixmap colormap ie toplevel
+Image-Base-Gtk2 multi-screen
 
 =head1 NAME
 

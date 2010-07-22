@@ -8,6 +8,9 @@ debian/rules
 debian/source/format
 debian/watch
 devel/gdk-drawable.pl
+devel/gdk-image.pl
+devel/Image.pm
+devel/Pixbuf.pm
 inc/my_pod2html
 inc/MyMakeMakerExtras.pm
 lib/Image/Base/Gtk2/Gdk/Drawable.pm

@@ -26,7 +26,7 @@ use base 'Image::Base';
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 1;
+our $VERSION = 2;
 
 sub new {
   my ($class, %params) = @_;
@@ -258,7 +258,8 @@ sub colour_to_colorobj {
 1;
 __END__
 
-=for stopwords resized filename Ryde Gdk bitmap pixmap
+=for stopwords resized filename Ryde Gdk bitmap pixmap pixmaps colormap
+colormaps Image-Base-Gtk2
 
 =head1 NAME
 

@@ -23,7 +23,7 @@ use warnings;
 use Carp;
 use base 'Image::Base::Gtk2::Gdk::Drawable';
 
-our $VERSION = 1;
+our $VERSION = 2;
 
 1;
 __END__
@@ -90,7 +90,7 @@ __END__
 
 
 
-=for stopwords resizes Gdk filename undef Ryde
+=for stopwords resizes Gdk filename undef Ryde Image-Base-Gtk2
 
 =head1 NAME
 
