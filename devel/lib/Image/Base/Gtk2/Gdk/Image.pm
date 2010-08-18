@@ -26,7 +26,7 @@ use base 'Image::Base';
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 1;
+our $VERSION = 0;
 
 sub new {
   my ($class, %params) = @_;
@@ -41,9 +41,8 @@ sub new {
     ### create new GdkImage
 
     my $imagetype = delete $params{'-imagetype'} || 'fastest';
-    my $visual = delete $params{'-visual'};
-    $visual
-      ||= ($params{'-colormap'} && $params{'-colormap'}->get_visual)
+    my $visual = delete $params{'-visual'}
+      || ($params{'-colormap'} && $params{'-colormap'}->get_visual)
         || Gtk2::Gdk::Visual->get_system;
     $params{'-colormap'} ||= $visual->colormap;
 
@@ -53,14 +52,17 @@ sub new {
                                                   delete $params{'-height'});
   }
 
-  return $class->SUPER::new (%params);
+  my $self = bless {}, $class;
+  $self->set (%params);
+  return $self;
 }
 
 my %attr_to_get_method = (-imagetype => 'type',
-                          -visual => 'colormap',
-                          -width  => 'width',
-                          -height => 'height',
-                          -depth  => 'depth');
+                          -colormap  => 'get_colormap',
+                          -visual    => 'visual',
+                          -width     => 'width',
+                          -height    => 'height',
+                          -depth     => 'depth');
 sub _get {
   my ($self, $key) = @_;
 
@@ -72,9 +74,13 @@ sub _get {
 
 sub set {
   my ($self, %params) = @_;
-  ### Image-Base-Gtk2-Gdk-Image set(): \%params
+  ### Image-GdkImage set(): \%params
 
   %$self = (%$self, %params);
+  
+  if (defined (my $colormap = delete $self->{'-colormap'})) {
+    $gdkimage->set_colormap ($colormap);
+  }
   ### set leaves: $self
 }
 
@@ -132,9 +138,8 @@ C<Image::Base::Gtk2::Gdk::Image> is a subclass of C<Image::Base>,
 =head1 DESCRIPTION
 
 C<Image::Base::Gtk2::Gdk::Image> extends C<Image::Base> to create and draw
-into GdkImage objects.  A GdkImage is an array of pixels in client-side
-memory, or possibly shared-memory with the X server.  There's no file load
-or save, just drawing operations.
+into GdkImage objects.  A GdkImage is pixels in client-side memory.  There's
+no file load or save, just drawing operations.
 
 =head1 FUNCTIONS
 
@@ -143,12 +148,12 @@ or save, just drawing operations.
 =item C<$image = Image::Base::Gtk2::Gdk::Image-E<gt>new (key=E<gt>value,...)>
 
 Create and return a new GdkImage image object.  It can be pointed at an
-existing GdkImage,
+existing C<Gtk2::Gdk::Image>,
 
     $image = Image::Base::Gtk2::Gdk::Image->new
                  (-gdkimage => $gdkimage);
 
-Or a new GdkImage created,
+Or a new C<Gtk2::Gdk::Image> created,
 
     $image = Image::Base::Gtk2::Gdk::Image->new
                  (-width    => 10,

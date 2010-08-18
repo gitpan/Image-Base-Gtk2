@@ -9,11 +9,16 @@ debian/source/format
 debian/watch
 devel/gdk-drawable.pl
 devel/gdk-image.pl
-devel/Image.pm
-devel/Pixbuf.pm
+devel/lib/Image/Base/Gtk2/Gdk/Image.pm
+devel/Makefile
+devel/misc.c
+devel/pixbuf-get-pixels.pl
+devel/pixbuf.pl
+devel/unused.pl
 inc/my_pod2html
 inc/MyMakeMakerExtras.pm
 lib/Image/Base/Gtk2/Gdk/Drawable.pm
+lib/Image/Base/Gtk2/Gdk/Pixbuf.pm
 lib/Image/Base/Gtk2/Gdk/Pixmap.pm
 lib/Image/Base/Gtk2/Gdk/Window.pm
 Makefile.PL
@@ -28,6 +33,7 @@ t/0-Test-YAML-Meta.t
 t/Drawable.t
 t/MyTestHelpers.pm
 t/MyTestImageBase.pm
+t/Pixbuf.t
 t/Pixmap.t
 t/Window.t
 META.yml                                 Module meta-data (added by MakeMaker)

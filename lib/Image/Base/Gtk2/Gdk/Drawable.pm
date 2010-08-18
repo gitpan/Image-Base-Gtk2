@@ -26,7 +26,7 @@ use base 'Image::Base';
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 2;
+our $VERSION = 3;
 
 sub new {
   my ($class, %params) = @_;
@@ -289,13 +289,21 @@ C<Image::Base::Gtk2::Gdk::Drawable> extends C<Image::Base> to draw into a
 Gdk drawable, meaning either a window or a pixmap.
 
 Colour names are anything recognised by C<< Gtk2::Gdk::Color->parse >>,
-which means various names like "pink" plus hex #RRGGBB or #RRRRGGGGBBB.  For
-X the names are generally found in F</etc/X11/rgb.txt>.  Special names "set"
-and "clear" mean pixel values 1 and 0 for use with bitmaps.
+which means various names like "pink" plus hex #RRGGBB or #RRRRGGGGBBB.  As
+of Gtk 2.20 the colour names are the Pango compiled-in copy of the X11
+F<rgb.txt>.  Special names "set" and "clear" mean pixel values 1 and 0 for
+use with bitmaps.
 
 The C<Image::Base::Gtk2::Gdk::Pixmap> subclass has some specifics for
 creating pixmaps, but this base Drawable is enough to draw into an existing
 one.
+
+Native Gdk drawing does much more than C<Image::Base> but if you have some
+generic pixel twiddling code for C<Image::Base> then this Drawable class
+lets you point it at a Gdk window etc.  Drawing into a window is a good way
+to show slow drawing progressively, rather than drawing into a pixmap or
+image file and only displaying when complete.  See C<Image::Base::Multiplex>
+for a way to do both simultaneously.
 
 =head1 FUNCTIONS
 
@@ -364,7 +372,8 @@ The screen of the underlying drawable (C<< $drawable->get_screen >>).
 L<Image::Base>,
 L<Image::Base::Gtk2::Gdk::Pixmap>,
 L<Image::Base::Gtk2::Gdk::Window>,
-L<Gtk2::Gdk::Drawable>
+L<Gtk2::Gdk::Drawable>,
+L<Image::Base::Multiplex>
 
 =head1 HOME PAGE
 

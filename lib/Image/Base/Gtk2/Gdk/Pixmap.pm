@@ -26,7 +26,7 @@ use base 'Image::Base::Gtk2::Gdk::Drawable';
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 2;
+our $VERSION = 3;
 
 sub new {
   my ($class, %params) = @_;
