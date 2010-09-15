@@ -41,7 +41,7 @@ if (! $have_File_Temp) {
 #------------------------------------------------------------------------------
 # VERSION
 
-my $want_version = 3;
+my $want_version = 4;
 is ($Image::Base::Gtk2::Gdk::Pixbuf::VERSION,
     $want_version, 'VERSION variable');
 is (Image::Base::Gtk2::Gdk::Pixbuf->VERSION,

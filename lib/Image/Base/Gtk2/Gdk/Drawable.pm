@@ -26,7 +26,7 @@ use base 'Image::Base';
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 3;
+our $VERSION = 4;
 
 sub new {
   my ($class, %params) = @_;
