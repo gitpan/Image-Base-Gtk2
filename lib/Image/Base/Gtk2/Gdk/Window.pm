@@ -23,7 +23,7 @@ use warnings;
 use Carp;
 use base 'Image::Base::Gtk2::Gdk::Drawable';
 
-our $VERSION = 4;
+our $VERSION = 5;
 
 1;
 __END__
@@ -63,13 +63,14 @@ __END__
 # }
 # 
 # sub ellipse {
-#   my ($self, $x1,$y1, $x2,$y2, $colour) = @_;
+#   my ($self, $x1,$y1, $x2,$y2, $colour, $fill) = @_;
 #   if ($colour eq 'None') {
 #     my ($bitmap, $bitmap_gc) = _make_bitmap_and_gc ($self);
-#     $bitmap->draw_arc ($bitmap_gc, 0,
+#     $bitmap->draw_arc ($bitmap_gc, $fill,
 #                        $x1, $y1,
 #                        $x2-$x1+1, $y2-$y1+1,
 #                        0, 360*64);
+#     # and outer 0.5 extra separately when filled
 #     $self->{'-drawable'}->shape_combine_mask ($bitmap, 0,0);
 #   } else {
 #     shift->SUPER::xy (@_);
@@ -133,7 +134,7 @@ C<Gtk2::Gdk::Window> object,
 
     $image = Image::Base::Gtk2::Gdk::Window->new (-window => $win);
 
-There's nothing to create a new X window since there's so many window
+There's nothing to create a new C<Gtk2::Gdk::Window> since there's so many
 attributes when creating which seem outside the scope of this C<Image::Base>
 wrapper.
 

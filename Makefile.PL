@@ -32,7 +32,9 @@ MyMakeMakerExtras::WriteMakefile
    LICENSE      => 'gpl',
    SIGN         => 1,
    PREREQ_PM    => {
-                    'Image::Base' => 0,
+                    # actually only pixbuf goes up to Image::Base ellipse(),
+                    # but it's not too terrible to ask for it always
+                    'Image::Base' => '1.12', # for ellipse() $fill
                     'Gtk2' => 0,
                    },
    MIN_PERL_VERSION => '5.008',

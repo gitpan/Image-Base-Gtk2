@@ -26,6 +26,6 @@ Bugs: mailto:user42@zip.com.au
 
 Package: libimage-base-gtk2-perl
 Architecture: all
-Depends: libimage-base-perl | libimage-base-bundle-perl, libgtk2-perl, ${perl:Depends}, ${misc:Depends}
+Depends: libimage-base-perl (>= 1.12), libgtk2-perl, ${perl:Depends}, ${misc:Depends}
 Description: Draw into Gtk2 windows and pixmaps.
  An Image::Base extension to operate on Gtk2 windows and pixmaps.

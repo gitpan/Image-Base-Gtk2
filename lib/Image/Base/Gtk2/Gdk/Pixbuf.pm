@@ -22,12 +22,13 @@ use strict;
 use warnings;
 use Carp;
 use Gtk2;
-use base 'Image::Base';
+use Image::Base 1.12; # version 1.12 for ellipse() $fill
+
+our $VERSION = 5;
+our @ISA = ('Image::Base');
 
 # uncomment this to run the ### lines
 #use Smart::Comments;
-
-our $VERSION = 4;
 
 sub new {
   my ($class, %params) = @_;
@@ -355,25 +356,26 @@ C<Image::Base::Gtk2::Gdk::Pixbuf> is a subclass of C<Image::Base>,
 =head1 DESCRIPTION
 
 C<Image::Base::Gtk2::Gdk::Pixbuf> extends C<Image::Base> to create and
-update image files using GdkPixbuf.  PNG and JPEG can be read and written,
-and in recent Gtk also TIFF, ICO and BMP.  Many further formats can be read
-but not written, including XPM, GIF, XBM and PCX.
+update image files using GdkPixbuf.  PNG and JPEG can always be read and
+written, and in recent Gtk also TIFF, ICO and BMP.  Many further formats can
+be read but not written, including XPM, GIF, XBM and PCX.
 
 Pixbufs are held in client-side memory and don't require an X server or
-C<< Gtk2->init >> so can be used for general-purpose file manipulations.
+C<< Gtk2->init >>, which means they can be used for general-purpose image
+and image file manipulations.
 
 The current drawing code is not very fast, but if you've got some pixel
 twiddling in C<Image::Base> style then this is a handy way to have it read
-or write various file formats.
+or write several file formats.
 
 Colour names are anything recognised by C<< Gtk2::Gdk::Color->parse >>,
 which means various names like "pink" plus hex #RRGGBB or #RRRRGGGGBBB.  As
-of Gtk 2.20 the names are the Pango compiled-in copy of the X11 F<rgb.txt>.
-Special colour "None" means a transparent pixel for a pixbuf with an "alpha"
-channel.
+of Gtk 2.20 the names are from the Pango compiled-in copy of the X11
+F<rgb.txt>.  Special colour "None" means a transparent pixel on a pixbuf
+with an "alpha" channel.
 
-Only 8-bit RGB or RGBA pixbufs are supported by this module currently, which
-is all that Gtk 2.20 itself supports.
+Only 8-bit RGB or RGBA pixbufs are supported by this module.  This is all
+that Gtk 2.20 itself supports too.
 
 =head1 FUNCTIONS
 
@@ -392,7 +394,7 @@ Or a file can be read,
     $image = Image::Base::Gtk2::Gdk::Pixbuf->new
                  (-file => '/my/file/name.jpeg');
 
-Or a new GdkPixbuf created with width and height,
+Or a new pixbuf created with width and height,
 
     $image = Image::Base::Gtk2::Gdk::Pixbuf->new
                  (-width  => 10,
@@ -411,9 +413,9 @@ C<-has_alpha>,
 =item C<< $image->load ($filename) >>
 
 Read the C<-file>, or set C<-file> to C<$filename> and then read.  This
-creates and sets a new underlying C<-pixbuf> since it's not possible to read
-into an existing pixbuf object, only create a new one.  C<-file_format> is
-set from the loaded file's format.
+creates and sets a new underlying C<-pixbuf> because it's not possible to
+read into an existing pixbuf object, only read a new one.  C<-file_format>
+is set from the loaded file's format.
 
 =item C<< $image->save >>
 
@@ -423,12 +425,12 @@ Write the C<-file>, or set C<-file> to C<$filename> and then write.
 C<-file_format> is the saved format.
 
 If C<-file_format> is not set there's a secret experimental feature which
-matches the C<-file> extension against the available pixbuf formats.  Is
-that a good idea, or would just say C<png> fallback be better?
+looks up the C<-file> filename extension in the available pixbuf formats.
+Is that a good idea, or would just say C<png> fallback be better?
 
 Some formats can be loaded but not saved.  C<png> and C<jpeg> can be saved
-always, and then C<ico> in Gtk 2.4 up, C<bmp> in Gtk 2.8 up and C<tiff> in
-Gtk 2.10 up.
+always, then C<ico> in Gtk 2.4 up, C<bmp> in Gtk 2.8 up, and C<tiff> in Gtk
+2.10 up.
 
 =back
 
@@ -451,16 +453,15 @@ the GdkPixbuf format names such as "png" or "jpeg", in upper or lower case.
 
 The size of a pixbuf cannot be changed once created.
 
-=item C<-has_alpha> (boolean)
+=item C<-has_alpha> (boolean, read-only)
 
 Whether the underlying pixbuf has a alpha channel, meaning a transparency
-mask (or partial transparency).
+mask (or partial transparency).  This cannot be changed once created.
 
 =item C<-zlib_compression> (integer, no default)
 
-The Zlib compression level to use when saving.  This is used when applicable
-and where possible, which currently means "png" format in Gtk 2.8.0 and
-higher.
+The Zlib compression level to use when saving.  This is used if applicable
+(only "png" format currently) and if possible (which means Gtk 2.8.0 up).
 
 =item C<-hotx> (integer or undef, default undef)
 
@@ -468,9 +469,9 @@ higher.
 
 The cursor hotspot in C<xpm> and C<ico> images (as per C<Image::Xpm>).
 
-These are loaded in Gtk 2.2 up, and are saved to C<ico> in Gtk 2.4 and
-higher (C<ico> saving is new in Gtk 2.4).  There's no C<xpm> saving at all
-as of Gtk 2.20.
+These are loaded from C<xpm> and C<ico> in in Gtk 2.2 up, and are saved to
+C<ico> in Gtk 2.4 and higher.  C<ico> saving is new in Gtk 2.4.  There's no
+C<xpm> saving as of Gtk 2.20.
 
 =cut
 

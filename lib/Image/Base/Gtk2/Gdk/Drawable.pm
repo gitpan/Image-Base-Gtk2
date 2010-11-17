@@ -21,12 +21,14 @@ use 5.008;
 use strict;
 use warnings;
 use Carp;
-use base 'Image::Base';
+
+use Image::Base;
+our @ISA = ('Image::Base');
 
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 4;
+our $VERSION = 5;
 
 sub new {
   my ($class, %params) = @_;
@@ -111,6 +113,11 @@ sub xy {
     ### Image-Gtk2GdkDrawable xy: "$x, $y, $colour"
     $self->{'-drawable'}->draw_point ($self->gc_for_colour($colour), $x, $y);
   } else {
+    # fetch using Pixbuf as it looks up colours
+
+    # $drawable->get_image would be an alternative, giving the full 16-bit
+    # GdkColor components, but Gtk2::Gdk::Image data not accessible as of
+    # Perl-Gtk 1.221
     my $pixbuf = Gtk2::Gdk::Pixbuf->new ('rgb',
                                          0,   # has alpha
                                          8,   # bits per sample
@@ -131,7 +138,7 @@ sub xy {
 }
 
 # Crib note: no limit on how many points passed to draw_points().  The
-# underlying XDrawPoints() automatically splits into multiple PolyPoint
+# underlying xlib XDrawPoints() automatically splits into multiple PolyPoint
 # requests as necessary.
 #
 sub Image_Base_Other_xy_points {
@@ -178,19 +185,26 @@ sub rectangle {
                                         $x2-$x1+$fill, $y2-$y1+$fill);
 }
 
+# Per notes in Image::Base::X11::Protocol::Drawable, a filled arc ellipse is
+# effectively 0.5 pixel smaller.  To make sure rightmost and bottom pixels
+# are drawn for now try an unfilled on top of a filled to get that extra 0.5
+# around the outside.  Can it be done better?
+#
 sub ellipse {
-  my ($self, $x1, $y1, $x2, $y2, $colour) = @_;
-  ### Image-Gtk2GdkDrawable ellipse: "$x1, $y1, $x2, $y2, $colour"
+  my ($self, $x1, $y1, $x2, $y2, $colour, $fill) = @_;
+  ### Image-Gtk2GdkDrawable ellipse: "$x1, $y1, $x2, $y2, $colour, ".($fill?1:0)
   my $drawable = $self->{'-drawable'};
   my $gc = $self->gc_for_colour($colour);
   if ($x1 == $x2 && $y1 == $y2) {
     $drawable->draw_point ($gc, $x1,$y1);
   } else {
-    $drawable->draw_arc ($gc,
-                         0, # unfilled
-                         $x1, $y1,
-                         $x2-$x1, $y2-$y1,
-                         0, 360*64);  # angles in 64ths of a 360 degrees
+    foreach my $fillarg (0 .. !!$fill) {
+      $drawable->draw_arc ($gc,
+                           $fillarg,
+                           $x1, $y1,
+                           $x2-$x1, $y2-$y1,
+                           0, 360*64);  # angles in 64ths of a 360 degrees
+    }
   }
 }
 

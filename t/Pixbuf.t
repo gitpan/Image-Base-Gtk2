@@ -30,8 +30,9 @@ use MyTestHelpers;
 BEGIN { MyTestHelpers::nowarnings() }
 
 require Image::Base::Gtk2::Gdk::Pixbuf;
+diag "Image::Base version ", Image::Base->VERSION;
 
-plan tests => 987;
+plan tests => 1360;
 
 my $have_File_Temp = eval { require File::Temp; 1 };
 if (! $have_File_Temp) {
@@ -41,7 +42,7 @@ if (! $have_File_Temp) {
 #------------------------------------------------------------------------------
 # VERSION
 
-my $want_version = 4;
+my $want_version = 5;
 is ($Image::Base::Gtk2::Gdk::Pixbuf::VERSION,
     $want_version, 'VERSION variable');
 is (Image::Base::Gtk2::Gdk::Pixbuf->VERSION,
@@ -333,8 +334,7 @@ SKIP: {
   local $MyTestImageBase::black = 'black';
   local $MyTestImageBase::white = 'white';
   local $MyTestImageBase::black = 'black';
-  MyTestImageBase::check_image ($image,
-                                base_ellipse_func => sub{1});
+  MyTestImageBase::check_image ($image);
 }
 
 exit 0;

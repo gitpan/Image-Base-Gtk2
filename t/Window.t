@@ -34,11 +34,13 @@ Gtk2->init_check
 plan tests => 17;
 
 use_ok ('Image::Base::Gtk2::Gdk::Window');
+diag "Image::Base version ", Image::Base->VERSION;
+
 
 #------------------------------------------------------------------------------
 # VERSION
 
-my $want_version = 4;
+my $want_version = 5;
 is ($Image::Base::Gtk2::Gdk::Window::VERSION,
     $want_version, 'VERSION variable');
 is (Image::Base::Gtk2::Gdk::Window->VERSION,
