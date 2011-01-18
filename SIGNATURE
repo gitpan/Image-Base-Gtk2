@@ -15,38 +15,41 @@ not run its Makefile.PL or Build.PL.
 Hash: SHA1
 
 SHA1 842745cb706f8f2126506f544492f7a80dbe29b3 COPYING
-SHA1 0c6cf99fb5f78eb0a75e994efb2f8b500b606e0a Changes
-SHA1 1bd794f094194fe4afaae85e2bf1e6a3c092b6f8 MANIFEST
-SHA1 e6e7c2904ea5d300c0ddf70fc5a80f5005229aa9 MANIFEST.SKIP
-SHA1 a730bd62f77a7be946a5809279c0e45798568adf META.yml
+SHA1 85f024a9428ac17fbacf7accdf04286e39756129 Changes
+SHA1 2a03d6be17ff5d0167f864d43ff49f4c07e9110d MANIFEST
+SHA1 efa47c98ea572cf27a93219b3fc08acbf255f915 MANIFEST.SKIP
+SHA1 2b133436e5231139aeefdbc7ad6a3c9e4e4ded3a META.yml
 SHA1 41d2ed2350c9236900c90ae510538b323bb55e50 Makefile.PL
-SHA1 6e1e96d4132f27f774eb2a9cd287f68edf1a4584 debian/changelog
+SHA1 7b21fe16c858f2b85d2513b049367911bc8a2f8f debian/changelog
 SHA1 ac3478d69a3c81fa62e60f5c3696165a4e5e6ac4 debian/compat
 SHA1 53a4219c33c55898e310b85d091a64c931cf769f debian/control
-SHA1 887d2c0401a1cdb0ae5c0c22e96c7dc312950b27 debian/copyright
+SHA1 13f60d886e6eaf2d9c70f6ccda6e5ff9a55b1ea0 debian/copyright
 SHA1 678859b6001093fdbecb2dd55000d308152448c0 debian/rules
 SHA1 61652cd1568dcf2614df833eba241755eee34e89 debian/source/format
 SHA1 a506591d96c8ca055ae8d80da48bf0d6e2d476b1 debian/watch
 SHA1 bd60c17459dadff4d62e1d76e430a5c0c8e51877 devel/Makefile
+SHA1 e537d2290ed1feeda0c25ff337ec8e5c68b8e863 devel/ellipse-tangent.pl
+SHA1 1ca76cbfe45825d1808fba48f87ce4c639360ca7 devel/ellipse.pl
 SHA1 d7851dcce9f2c426e306bccd881d66bf0d6b4401 devel/gdk-drawable.pl
-SHA1 4b26b13e89321214d0470517b5d7db51131d6777 devel/gdk-image.pl
-SHA1 0bde47ab0eb8e8ca7b995c7edcca6c2d4babb1db devel/lib/Image/Base/Gtk2/Gdk/Image.pm
+SHA1 16f955e9836deabca01ce7694bc82e469889a6cd devel/gdk-image.pl
 SHA1 919d8bea6bfec38ed5e7b59be6a79128226a05cd devel/misc.c
 SHA1 d5658175b586ae739affd498bddb3a98be430f0a devel/pixbuf-get-pixels.pl
-SHA1 5418e8d5e05eca14b8891ad9a5feaf1022063f03 devel/pixbuf.pl
+SHA1 5ff8594e6350759e0e3ef9d3761a5f88dfe2aa04 devel/pixbuf.pl
 SHA1 f92316e4865f19cd60dfda684fae614132420504 devel/unused.pl
-SHA1 4fb53efe76b3b2264eaa4cf7780cb0c4923e18a5 inc/MyMakeMakerExtras.pm
-SHA1 692a1ddc2ca6b98cac7b48ea40bc1ac1509e8ed9 inc/my_pod2html
-SHA1 55a180ff331d167315f4cc042904a40b6a77fcf4 lib/Image/Base/Gtk2/Gdk/Drawable.pm
-SHA1 cb25369e690be14e7c7470109ffb29fd86941533 lib/Image/Base/Gtk2/Gdk/Pixbuf.pm
-SHA1 61a3627b233a375e8aac29b94e31de987085ef43 lib/Image/Base/Gtk2/Gdk/Pixmap.pm
-SHA1 f6dbe9cd1c307c8bf7c4c46290ea36c8922601ac lib/Image/Base/Gtk2/Gdk/Window.pm
-SHA1 be61b2f0e5dae18a2cf5e38069f356942e52ef05 t/Drawable.t
-SHA1 5e5680b471811244fe93571efc23e7b6089cac3b t/MyTestHelpers.pm
-SHA1 04ec62124e0c36edacf941e73983b0f8e3f9ae18 t/MyTestImageBase.pm
-SHA1 ccacb07d04eebbba750d7958cdf439ae75cbafd6 t/Pixbuf.t
-SHA1 f372ca3045e5477afec8355d35469eb0716ca827 t/Pixmap.t
-SHA1 c5bfba002e0736deb74cc559abea9c3749890216 t/Window.t
+SHA1 caf7dea47f991eb60f36d4a94f1c116edb3e2ad3 inc/MyMakeMakerExtras.pm
+SHA1 7a988b2aa7ed09f1cb9029a1ef3f0e2139dca0cf inc/my_pod2html
+SHA1 1974ac460ce4fd424ebff7d65ef76e66ce7b82cb lib/Image/Base/Gtk2/Gdk/Drawable.pm
+SHA1 7782ba31bbded2d717570abbed8406906b8d813d lib/Image/Base/Gtk2/Gdk/Image.pm
+SHA1 ba0580b27e1202caaaa4d6ea383ecb842c27e875 lib/Image/Base/Gtk2/Gdk/Pixbuf.pm
+SHA1 f3b4868490544c518bff13bc6b79f73eea52f2c8 lib/Image/Base/Gtk2/Gdk/Pixmap.pm
+SHA1 e53b3c9b6db028848590bb04084bd3ecabdb0580 lib/Image/Base/Gtk2/Gdk/Window.pm
+SHA1 a431dc736d7a1484af89049449bdabb24013497f t/Drawable.t
+SHA1 a1139aba957af35233f83835e15562d7703d3f5a t/Image.t
+SHA1 fd7ad68d9696ce2b58655b9d6c006c12540878cd t/MyTestHelpers.pm
+SHA1 52cd7b888faaadb34e3547305224eb55a1da23cd t/MyTestImageBase.pm
+SHA1 2a3e257f0024a896cff2dae4f0f89ad1bbc03c02 t/Pixbuf.t
+SHA1 b021ad2f4a30be440b6a71c9387918c789bcea61 t/Pixmap.t
+SHA1 11d81afc9ddf8443aaebb7bbeb46a9d4359f7863 t/Window.t
 SHA1 9127f78a0dfa04976acbb979dd7862ef59a74c58 xt/0-META-read.t
 SHA1 37abd43b41068804ea4bb099fdd89af21be82926 xt/0-Test-DistManifest.t
 SHA1 8f93fb4c8f0424a4442cc93c9a2e86342ef55281 xt/0-Test-Pod.t
@@ -55,7 +58,7 @@ SHA1 fb517c2fae5ddac559318bf6a224949115ea3129 xt/0-Test-YAML-Meta.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.10 (GNU/Linux)
 
-iD8DBQFM4x+dLFMCIV9q3ToRAmJpAJ9xiccvBeWun/5brbLkcBkZK1TUYQCgjGj6
-POe0dRpZvp7UqRu+0OqtFTI=
-=2PvQ
+iD8DBQFNNiGHLFMCIV9q3ToRAirMAJ4qOTLUyUjzi4oLrtAUWxy5X+e2hgCgs6Z5
+F5xHnRQbUxadU8w1duAXKAs=
+=j85w
 -----END PGP SIGNATURE-----

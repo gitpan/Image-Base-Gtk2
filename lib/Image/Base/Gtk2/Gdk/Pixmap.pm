@@ -1,4 +1,4 @@
-# Copyright 2010 Kevin Ryde
+# Copyright 2010, 2011 Kevin Ryde
 
 # This file is part of Image-Base-Gtk2.
 #
@@ -26,7 +26,7 @@ use base 'Image::Base::Gtk2::Gdk::Drawable';
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 5;
+our $VERSION = 6;
 
 sub new {
   my ($class, %params) = @_;
@@ -268,7 +268,7 @@ L<http://user42.tuxfamily.org/image-base-gtk2/index.html>
 
 =head1 LICENSE
 
-Copyright 2010 Kevin Ryde
+Copyright 2010, 2011 Kevin Ryde
 
 Image-Base-Gtk2 is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the Free

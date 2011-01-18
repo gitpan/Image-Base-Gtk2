@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2010 Kevin Ryde
+# Copyright 2010, 2011 Kevin Ryde
 
 # This file is part of Image-Base-Gtk2.
 #
@@ -32,7 +32,7 @@ BEGIN { MyTestHelpers::nowarnings() }
 require Image::Base::Gtk2::Gdk::Pixbuf;
 diag "Image::Base version ", Image::Base->VERSION;
 
-plan tests => 1360;
+plan tests => 1565;
 
 my $have_File_Temp = eval { require File::Temp; 1 };
 if (! $have_File_Temp) {
@@ -42,7 +42,7 @@ if (! $have_File_Temp) {
 #------------------------------------------------------------------------------
 # VERSION
 
-my $want_version = 5;
+my $want_version = 6;
 is ($Image::Base::Gtk2::Gdk::Pixbuf::VERSION,
     $want_version, 'VERSION variable');
 is (Image::Base::Gtk2::Gdk::Pixbuf->VERSION,
@@ -144,10 +144,19 @@ HERE
   is ($image->get('-height'), 3, 'get() xpm -hoty');
  SKIP: {
     if (Gtk2->check_version(2,2,0)) {
-      skip 'XPM x_hot, y_hot new in Gtk 2.2', 2;
+      skip 'XPM x_hot, y_hot new in Gtk 2.2', 6;
     }
     is ($image->get('-hotx'), 0, 'get() xpm -hotx');
     is ($image->get('-hoty'), 1, 'get() xpm -hoty');
+
+    $image->set('-hotx', 4);
+    $image->set('-hoty', 5);
+    is ($image->get('-hotx'), 4, 'set() -hotx');
+    is ($image->get('-hoty'), 5, 'set() -hoty');
+
+    $image->load_string ($str);
+    is ($image->get('-hotx'), 0, 'new pixbuf -hotx');
+    is ($image->get('-hoty'), 1, 'new pixbuf -hoty');
   }
 }
 

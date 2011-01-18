@@ -1,4 +1,4 @@
-# Copyright 2010 Kevin Ryde
+# Copyright 2010, 2011 Kevin Ryde
 
 # This file is part of Image-Base-Gtk2.
 #
@@ -28,7 +28,7 @@ our @ISA = ('Image::Base');
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 5;
+our $VERSION = 6;
 
 sub new {
   my ($class, %params) = @_;
@@ -251,16 +251,16 @@ sub colour_to_colorobj {
   my $colormap = $drawable->get_colormap;
   if (! $colormap) {
     if ($drawable->get_depth == 1) {
-      if ($colour eq '#000000' || $colour eq '#000000000000') {
+      if ($colour =~ /^#(000000)+$/) {
         return Gtk2::Gdk::Color->new (0,0,0, 0);
-      } elsif ($colour eq '#FFFFFF' || $colour eq '#FFFFFFFFFFFF') {
+      } elsif ($colour  =~ /^#(FFFFFF)+$/i) {
         return Gtk2::Gdk::Color->new (0,0,0, 1);
       }
     }
     croak "No colormap to interpret colour: $colour";
   }
 
-  # think parse and rgb_find are client-side operations, no no need to cache
+  # think parse and rgb_find are client-side operations, no need to cache
   # the results
   #
   my $colorobj = Gtk2::Gdk::Color->parse ($colour)
@@ -395,7 +395,7 @@ L<http://user42.tuxfamily.org/image-base-gtk2/index.html>
 
 =head1 LICENSE
 
-Copyright 2010 Kevin Ryde
+Copyright 2010, 2011 Kevin Ryde
 
 Image-Base-Gtk2 is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the Free

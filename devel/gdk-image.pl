@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2010 Kevin Ryde
+# Copyright 2010, 2011 Kevin Ryde
 
 # This file is part of Image-Base-Gtk2.
 #
@@ -27,11 +27,43 @@ use Smart::Comments;
 {
   require Gtk2;
   Gtk2->init;
-  my $bitmap = Gtk2::Gdk::Pixmap->new (undef, 256,256, 1);
-  my $image = $bitmap->get_image (0,0, 129,128);
-  say $image->bpp;
-  say $image->bpl;
-  say $image->bits_per_pixel;
+  foreach my $visual (
+                      Gtk2::Gdk::Visual->get_best,
+                      Gtk2::Gdk->list_visuals,
+                      Gtk2::Gdk::Screen->get_default->list_visuals,
+                     ) {
+    ### $visual
+    ### type: $visual->type
+    ### depth: $visual->depth
+  }
+
+  foreach my $depth (0 .. 128) {
+    my $visual = Gtk2::Gdk::Visual->get_best_with_depth($depth);
+    if ($visual) {
+      ### $depth
+      ### $visual
+      ### type: $visual && $visual->type
+      ### depth: $visual && $visual->depth
+    }
+  }
+  exit 0;
+}
+
+{
+  require Image::Base::Gtk2::Gdk::Image;
+  require Gtk2;
+  Gtk2->init;
+  Gtk2::Gdk::Image->can('get_colormap') or die "No GdkImage";
+
+  my $image = Image::Base::Gtk2::Gdk::Image->new
+    (-width => 100,
+     -height => 50);
+  say $image->get('-width');
+  say $image->get('-height');
+  say $image->get('-visual');
+  say $image->get('-colormap')//'undef';
+  say $image->get('-depth');
+  say $image->xy(0,0);
   exit 0;
 }
 

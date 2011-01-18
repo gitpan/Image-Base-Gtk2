@@ -1,4 +1,4 @@
-# Copyright 2010 Kevin Ryde
+# Copyright 2010, 2011 Kevin Ryde
 
 # This file is part of Image-Base-Gtk2.
 #
@@ -23,7 +23,7 @@ use warnings;
 use Carp;
 use base 'Image::Base::Gtk2::Gdk::Drawable';
 
-our $VERSION = 5;
+our $VERSION = 6;
 
 1;
 __END__
@@ -168,7 +168,7 @@ L<http://user42.tuxfamily.org/image-base-gtk2/index.html>
 
 =head1 LICENSE
 
-Copyright 2010 Kevin Ryde
+Copyright 2010, 2011 Kevin Ryde
 
 Image-Base-Gtk2 is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the Free

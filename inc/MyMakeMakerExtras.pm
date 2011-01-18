@@ -1,6 +1,6 @@
 # MyMakeMakerExtra.pm -- my shared MakeMaker extras
 
-# Copyright 2009, 2010 Kevin Ryde
+# Copyright 2009, 2010, 2011 Kevin Ryde
 
 # MyMakeMakerExtras.pm is shared by several distributions.
 #
@@ -56,8 +56,10 @@ sub WriteMakefile {
     $my_options{$opt} = delete $opts{$opt};
   }
 
+  ### chain to WriteMakefile()
   ### %opts
   ExtUtils::MakeMaker::WriteMakefile (%opts);
+  ### done
 }
 
 sub strip_comments {

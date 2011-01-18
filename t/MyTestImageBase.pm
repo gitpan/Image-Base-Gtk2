@@ -17,6 +17,12 @@
 # You should have received a copy of the GNU General Public License along
 # with this file.  If not, see <http://www.gnu.org/licenses/>.
 
+
+# wide/high ellipse cases
+# fill check no gaps
+# fill check concave
+
+
 package MyTestImageBase;
 use strict;
 use warnings;
@@ -61,6 +67,17 @@ sub dump_image {
 }
 
 #-----------------------------------------------------------------------------
+
+sub is_pixel {
+  my ($image, $x,$y, $colour, $name) = @_;
+  my $width = $image->get('-width');
+
+  my $got = mung_colour($image->xy($x,$y));
+  is ($got, $colour, "pixel $x,$y  $colour  on $name");
+  my $bad = ($got ne $colour);
+  ### $bad
+  return $bad;
+}
 
 sub is_hline {
   my ($image, $x1,$x2, $y, $colour, $name) = @_;
@@ -156,8 +173,8 @@ sub all_hline {
   foreach my $x ($x1 .. $x2) {
     ### all_hline look at: "$x,$y c=".$image->xy($x,$y)
     my $got = mung_colour($image->xy($x,$y));
+    is ($got, $colour, "all_hline x=$x1..$x2,y=$y  $colour  on $name");
     if ($got ne $colour) {
-      ok (0, "all_hline x=$x1..$x2,y=$y  $colour  on $name");
       return 1; # bad
     }
   }
@@ -171,13 +188,14 @@ sub all_vline {
   foreach my $y ($y1 .. $y2) {
     ### all_hline look at: "$x,$y"
     my $got = mung_colour($image->xy($x,$y));
+    is ($got, $colour, "all_vline x=$x,y=$y1..$y  $colour  on $name");
     if ($got ne $colour) {
-      ok (0, "all_vline x=$x,y=$y1..$y  $colour  on $name");
       return 1; # bad
     }
   }
   return 0; # good
 }
+
 
 #-----------------------------------------------------------------------------
 
@@ -211,12 +229,12 @@ sub check_line {
     $image->rectangle (0,0, $width-1,$height-1, $black, 1);
     $image->line ($x1,$y1, $x2,$y2, $white);
 
-    is (mung_colour($image->xy($x1,$y1)),
-        $white_expect,
-        "corner $x1,$y1 of $name");
-    is_rect ($image, $x1-1,$x2+1, $y1-1,$y2+1, $black, $name);
-
-    # dump_image ($image);
+    my $bad = (is_pixel ($image, $x1,$y1, $white, $name)
+               + is_pixel ($image, $x2,$y2, $white, $name)
+               + is_rect ($image, $x1-1,$x2+1, $y1-1,$y2+1, $black, $name));
+    if ($bad) {
+      dump_image ($image);
+    }
   }
 }
 

@@ -25,6 +25,11 @@ use Gtk2;
 use Smart::Comments;
 
 
+{
+  my @formats = Gtk2::Gdk::Pixbuf->get_formats;
+  ### @formats
+  exit 0;
+}
 
 {
   my %uniq;

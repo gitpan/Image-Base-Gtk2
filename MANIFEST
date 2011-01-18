@@ -7,9 +7,10 @@ debian/copyright
 debian/rules
 debian/source/format
 debian/watch
+devel/ellipse-tangent.pl
+devel/ellipse.pl
 devel/gdk-drawable.pl
 devel/gdk-image.pl
-devel/lib/Image/Base/Gtk2/Gdk/Image.pm
 devel/Makefile
 devel/misc.c
 devel/pixbuf-get-pixels.pl
@@ -18,6 +19,7 @@ devel/unused.pl
 inc/my_pod2html
 inc/MyMakeMakerExtras.pm
 lib/Image/Base/Gtk2/Gdk/Drawable.pm
+lib/Image/Base/Gtk2/Gdk/Image.pm
 lib/Image/Base/Gtk2/Gdk/Pixbuf.pm
 lib/Image/Base/Gtk2/Gdk/Pixmap.pm
 lib/Image/Base/Gtk2/Gdk/Window.pm
@@ -26,6 +28,7 @@ MANIFEST			This list of files
 MANIFEST.SKIP
 SIGNATURE
 t/Drawable.t
+t/Image.t
 t/MyTestHelpers.pm
 t/MyTestImageBase.pm
 t/Pixbuf.t

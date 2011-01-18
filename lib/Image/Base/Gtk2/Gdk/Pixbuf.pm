@@ -1,4 +1,4 @@
-# Copyright 2010 Kevin Ryde
+# Copyright 2010, 2011 Kevin Ryde
 
 # This file is part of Image-Base-Gtk2.
 #
@@ -24,7 +24,7 @@ use Carp;
 use Gtk2;
 use Image::Base 1.12; # version 1.12 for ellipse() $fill
 
-our $VERSION = 5;
+our $VERSION = 6;
 our @ISA = ('Image::Base');
 
 # uncomment this to run the ### lines
@@ -75,10 +75,18 @@ my %attr_to_get_method = (-has_alpha  => 'get_has_alpha',
                           -width      => 'get_width',
                           -height     => 'get_height',
                          );
+my %attr_to_get_option = (-hotx => 'x_hot',
+                          -hoty => 'y_hot',
+                         );
 sub _get {
   my ($self, $key) = @_;
   if (my $method = $attr_to_get_method{$key}) {
     return $self->{'-pixbuf'}->$method;
+  }
+  if ((my $option = $attr_to_get_option{$key})
+      && ! exists $self->{$key}) {
+    ### get_option(): $option
+    return $self->{'-pixbuf'}->get_option($option);
   }
   return $self->SUPER::_get($key);
 }
@@ -93,12 +101,7 @@ sub set {
     $pixbuf->get_colorspace eq 'rgb'
       or croak "Only pixbufs of 'rgb' colorspace supported";
 
-    if (! exists $params{'-hotx'}) {
-      $params{'-hotx'} = $pixbuf->get_option('x_hot');
-    }
-    if (! exists $params{'-hoty'}) {
-      $params{'-hoty'} = $pixbuf->get_option('y_hot');
-    }
+    delete @{$self}{keys %attr_to_get_option}; # hash slice
   }
 
   foreach my $key (keys %params) {
@@ -469,9 +472,15 @@ The Zlib compression level to use when saving.  This is used if applicable
 
 The cursor hotspot in C<xpm> and C<ico> images (as per C<Image::Xpm>).
 
-These are loaded from C<xpm> and C<ico> in in Gtk 2.2 up, and are saved to
-C<ico> in Gtk 2.4 and higher.  C<ico> saving is new in Gtk 2.4.  There's no
-C<xpm> saving as of Gtk 2.20.
+These are loaded from C<xpm> and C<ico> files in Gtk 2.2 up, and are saved
+to C<ico> in Gtk 2.4 and higher (C<ico> saving is new in Gtk 2.4, and
+there's no C<xpm> saving as of Gtk 2.22).
+
+In the current code a new pixbuf set in or loaded replaces C<-hotx> or
+C<-hoty>, treating these attributes as associated with the pixbuf.  But
+setting them doesn't change the pixbuf as such since as of Gtk 2.22 the
+C<< $pixbuf->set_option >> won't replace existing option values in the
+pixbuf.
 
 =cut
 
@@ -492,7 +501,7 @@ L<http://user42.tuxfamily.org/image-base-gtk2/index.html>
 
 =head1 LICENSE
 
-Copyright 2010 Kevin Ryde
+Copyright 2010, 2011 Kevin Ryde
 
 Image-Base-Gtk2 is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the Free
