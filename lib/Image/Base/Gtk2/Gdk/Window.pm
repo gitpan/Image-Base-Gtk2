@@ -23,7 +23,7 @@ use warnings;
 use Carp;
 use base 'Image::Base::Gtk2::Gdk::Drawable';
 
-our $VERSION = 6;
+our $VERSION = 7;
 
 1;
 __END__
@@ -55,7 +55,7 @@ __END__
 #   my ($self, $x1, $y1, $x2, $y2, $colour, $fill) = @_;
 #   if ($colour eq 'None') {
 #     my ($bitmap, $bitmap_gc) = _make_bitmap_and_gc ($self);
-#     $bitmap->draw_rectangle ($bitmap_gc, 1, $x1,$y1, $x2-$x1+1, $y2-$y1+1);
+#     Gtk2::Ex::GdkBits::draw_rectangle_corners ($bitmap, $bitmap_gc, 1, $x1,$y1, $x2,$y2);
 #     $self->{'-drawable'}->shape_combine_mask ($bitmap, 0,0);
 #   } else {
 #     $self->SUPER::rectangle ($x1, $y1, $x2, $y2, $colour, $fill);

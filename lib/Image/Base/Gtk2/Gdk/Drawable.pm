@@ -28,7 +28,7 @@ our @ISA = ('Image::Base');
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 6;
+our $VERSION = 7;
 
 sub new {
   my ($class, %params) = @_;
@@ -183,6 +183,13 @@ sub rectangle {
   $self->{'-drawable'}->draw_rectangle ($self->gc_for_colour($colour), $fill,
                                         $x1, $y1,
                                         $x2-$x1+$fill, $y2-$y1+$fill);
+
+  # or with WidgetBits,
+  # Gtk2::Ex::GdkBits::draw_rectangle_corners
+  #     ($self->{'-drawable'}
+  #      $self->gc_for_colour($colour),
+  #      $fill, $x1,$y1, $x2,$y2);
+
 }
 
 # Per notes in Image::Base::X11::Protocol::Drawable, a filled arc ellipse is
@@ -272,8 +279,7 @@ sub colour_to_colorobj {
 1;
 __END__
 
-=for stopwords resized filename Ryde Gdk bitmap pixmap pixmaps colormap
-colormaps Image-Base-Gtk2
+=for stopwords resized filename Ryde Gdk bitmap pixmap pixmaps colormap colormaps Image-Base-Gtk2 Pango Gtk
 
 =head1 NAME
 

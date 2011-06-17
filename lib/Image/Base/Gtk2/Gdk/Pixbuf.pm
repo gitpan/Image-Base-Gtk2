@@ -16,6 +16,10 @@
 # with Image-Base-Gtk2.  If not, see <http://www.gnu.org/licenses/>.
 
 
+# A -quality_percent could set quality=> on save().
+# cf Image::Base::Prima::Image and Image::Base::Imager might have similar.
+
+
 package Image::Base::Gtk2::Gdk::Pixbuf;
 use 5.008;
 use strict;
@@ -24,7 +28,7 @@ use Carp;
 use Gtk2;
 use Image::Base 1.12; # version 1.12 for ellipse() $fill
 
-our $VERSION = 6;
+our $VERSION = 7;
 our @ISA = ('Image::Base');
 
 # uncomment this to run the ### lines
@@ -183,6 +187,7 @@ sub save {
     }
   }
 
+  # cf Gtk2::Ex::PixbufBits save_adapt()
   my @options;
   $file_format = lc($file_format);
   if ($file_format eq 'png') {
@@ -211,7 +216,7 @@ sub _filename_to_format {
       if ($ext eq $fext) {
         return $format->{'name'};
       }
-    }    
+    }
   }
 }
 
@@ -231,11 +236,14 @@ sub xy {
     } else {
       my $colorobj = $self->colour_to_colorobj($colour);
       $data = pack ('CCC',
-                       $colorobj->red >> 8,
-                       $colorobj->blue >> 8,
-                       $colorobj->green >> 8)
+                    $colorobj->red >> 8,
+                    $colorobj->green >> 8,
+                    $colorobj->blue >> 8)
         . "\xFF"; # alpha
     }
+
+    # $pixbuf->fill($pixel) would also be possible, but new_from_data()
+    # saves a separate create and fill
     ### $data
     my $src_pixbuf = Gtk2::Gdk::Pixbuf->new_from_data
       ($data,
@@ -280,8 +288,8 @@ sub rectangle {
   my ($self, $x1,$y1, $x2,$y2, $colour, $fill) = @_;
   ### rectangle(): "$x1,$y1, $x2,$y2, $colour, ".($fill||0)
 
-  if ($x1 > $x2) { ($x1,$x2) = ($x2,$x1) };  # swap
-  if ($y1 > $y2) { ($y1,$y2) = ($y2,$y1) };  # swap
+  if ($x1 > $x2) { ($x1,$x2) = ($x2,$x1) }   # swap
+  if ($y1 > $y2) { ($y1,$y2) = ($y2,$y1) }   # swap
 
   my $w = $x2 - $x1 + 1;
   my $h = $y2 - $y1 + 1;
@@ -297,9 +305,9 @@ sub rectangle {
       $pixel = 0;
     } else {
       my $colorobj = $self->colour_to_colorobj($colour);
-      $pixel = ((  ($colorobj->red  & 0xFF00) << 16)
-                + (($colorobj->blue & 0xFF00) << 8)
-                + ($colorobj->green & 0xFF00)
+      $pixel = ((  ($colorobj->red   & 0xFF00) << 16)
+                + (($colorobj->green & 0xFF00) << 8)
+                + ($colorobj->blue   & 0xFF00)
                 + 0xFF);
     }
     my $src_pixbuf = Gtk2::Gdk::Pixbuf->new
@@ -334,7 +342,7 @@ sub colour_to_colorobj {
 1;
 __END__
 
-=for stopwords undef Ryde Gdk Images pixbuf colormap ie toplevel
+=for stopwords undef Ryde Gdk Images pixbuf colormap ie toplevel GdkPixbuf PNG JPEG Gtk ICO BMP XPM GIF XBM PCX Pixbufs Pango RGB RGBA pixbufs filename png jpeg boolean Zlib hotspot
 
 =head1 NAME
 
@@ -470,15 +478,15 @@ The Zlib compression level to use when saving.  This is used if applicable
 
 =item C<-hoty> (integer or undef, default undef)
 
-The cursor hotspot in C<xpm> and C<ico> images (as per C<Image::Xpm>).
+The cursor hotspot in C<xpm> and C<ico> images.
 
-These are loaded from C<xpm> and C<ico> files in Gtk 2.2 up, and are saved
-to C<ico> in Gtk 2.4 and higher (C<ico> saving is new in Gtk 2.4, and
-there's no C<xpm> saving as of Gtk 2.22).
+These are loaded from C<xpm> and C<ico> files in Gtk 2.2 up (C<get_option>
+"x_hot" and "y_hot"), and are saved to C<ico> in Gtk 2.4 and higher (C<ico>
+saving is new in Gtk 2.4, and there's no C<xpm> saving as of Gtk 2.22).
 
-In the current code a new pixbuf set in or loaded replaces C<-hotx> or
-C<-hoty>, treating these attributes as associated with the pixbuf.  But
-setting them doesn't change the pixbuf as such since as of Gtk 2.22 the
+In the current code these are treated as belonging to the pixbuf, so a new
+pixbuf set or loaded replaces C<-hotx> or C<-hoty>.  But the settings are
+not held in the pixbuf as such since as of Gtk 2.22
 C<< $pixbuf->set_option >> won't replace existing option values in the
 pixbuf.
 

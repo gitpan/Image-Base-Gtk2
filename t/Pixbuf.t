@@ -22,9 +22,6 @@ use strict;
 use warnings;
 use Test::More;
 
-use lib 'devel/lib';
-
-
 use lib 't';
 use MyTestHelpers;
 BEGIN { MyTestHelpers::nowarnings() }
@@ -32,7 +29,7 @@ BEGIN { MyTestHelpers::nowarnings() }
 require Image::Base::Gtk2::Gdk::Pixbuf;
 diag "Image::Base version ", Image::Base->VERSION;
 
-plan tests => 1565;
+plan tests => 1549;
 
 my $have_File_Temp = eval { require File::Temp; 1 };
 if (! $have_File_Temp) {
@@ -42,7 +39,7 @@ if (! $have_File_Temp) {
 #------------------------------------------------------------------------------
 # VERSION
 
-my $want_version = 6;
+my $want_version = 7;
 is ($Image::Base::Gtk2::Gdk::Pixbuf::VERSION,
     $want_version, 'VERSION variable');
 is (Image::Base::Gtk2::Gdk::Pixbuf->VERSION,
@@ -53,6 +50,7 @@ ok (eval { Image::Base::Gtk2::Gdk::Pixbuf->VERSION($want_version); 1 },
 my $check_version = $want_version + 1000;
 ok (! eval { Image::Base::Gtk2::Gdk::Pixbuf->VERSION($check_version); 1 },
     "VERSION class check $check_version");
+
 
 #------------------------------------------------------------------------------
 # new() -pixbuf
@@ -271,6 +269,28 @@ SKIP: {
 }
 
 #------------------------------------------------------------------------------
+# xy() colour bytes
+
+foreach my $has_alpha (0, 1) {
+  my $image = Image::Base::Gtk2::Gdk::Pixbuf->new
+    (-width => 1, -height => 1, -has_alpha => $has_alpha);
+
+  foreach my $elem (['#123456', "\x12\x34\x56"],
+                    ['#abcdef', "\xAB\xCD\xEF"],
+                   ) {
+    my ($colour, $want_bytes) = @$elem;
+    $image->xy(0,0,$colour);
+
+    my $got_bytes = $image->get('-pixbuf')->get_pixels;
+    $got_bytes = substr($got_bytes,0,3);
+    is ($got_bytes, $want_bytes, "get_pixels() bytes");
+    my $got_colour = $image->xy(0,0);
+    is ($got_colour, uc($colour), "get_pixels() colour");
+  }
+}
+
+
+#------------------------------------------------------------------------------
 # line
 
 {
@@ -330,6 +350,27 @@ SKIP: {
   is ($image->xy (1,1), '#FFFFFF');
   is ($image->xy (2,1), '#FFFFFF');
   is ($image->xy (3,3), '#000000');
+}
+
+#------------------------------------------------------------------------------
+# rectangle() colour bytes
+
+foreach my $has_alpha (0, 1) {
+  my $image = Image::Base::Gtk2::Gdk::Pixbuf->new
+    (-width => 1, -height => 1, -has_alpha => $has_alpha);
+
+  foreach my $elem (['#123456', "\x12\x34\x56"],
+                    ['#abcdef', "\xAB\xCD\xEF"],
+                   ) {
+    my ($colour, $want_bytes) = @$elem;
+    $image->rectangle(0,0,0,0,$colour,1); # fill
+
+    my $got_bytes = $image->get('-pixbuf')->get_pixels;
+    $got_bytes = substr($got_bytes,0,3);
+    is ($got_bytes, $want_bytes, "get_pixels() bytes");
+    my $got_colour = $image->xy(0,0);
+    is ($got_colour, uc($colour), "get_pixels() colour");
+  }
 }
 
 #------------------------------------------------------------------------------

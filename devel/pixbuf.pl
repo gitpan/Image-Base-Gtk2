@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2010 Kevin Ryde
+# Copyright 2010, 2011 Kevin Ryde
 
 # This file is part of Image-Base-Gtk2.
 #
@@ -27,6 +27,9 @@ use Smart::Comments;
 
 {
   my @formats = Gtk2::Gdk::Pixbuf->get_formats;
+  # ### @formats
+  # @formats = grep {$_->{'is_writable'}} @formats;
+  @formats = map {$_->{'name'}} @formats;
   ### @formats
   exit 0;
 }

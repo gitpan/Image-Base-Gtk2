@@ -1,4 +1,4 @@
-# Copyright 2010 Kevin Ryde
+# Copyright 2010, 2011 Kevin Ryde
 #
 # This file is part of Image-Base-Gtk2.
 #
@@ -20,12 +20,14 @@ Section: perl
 Priority: optional
 Build-Depends: cdbs, debhelper (>= 5)
 Maintainer: Kevin Ryde <user42@zip.com.au>
-Standards-Version: 3.9.1
+Standards-Version: 3.9.2
 Homepage: http://user42.tuxfamily.org/image-base-gtk2/index.html
 Bugs: mailto:user42@zip.com.au
 
 Package: libimage-base-gtk2-perl
 Architecture: all
 Depends: libimage-base-perl (>= 1.12), libgtk2-perl, ${perl:Depends}, ${misc:Depends}
-Description: Draw into Gtk2 windows and pixmaps.
- An Image::Base extension to operate on Gtk2 windows and pixmaps.
+Description: Draw into Gtk2 windows, pixmaps, pixbuf and images.
+ An Image::Base extension to operate on Gtk2 windows
+ (Gtk2::Gdk::Window), pixmaps (Gtk2::Gdk::Pixmap), pixbufs
+ (Gtk2::Gdk::Pixbuf) and images (Gtk2::Gdk::Image).

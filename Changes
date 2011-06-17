@@ -16,6 +16,9 @@ You can get a copy of the GNU General Public License online at
 <http://www.gnu.org/licenses/>.
 
 
+Version 7, June 2011
+    - Pixbuf fix blue/green wrong way around!
+
 Version 6, December 2010
     - hex colours in lower case too
     - new Image::Base::Gtk2::Gdk::Image

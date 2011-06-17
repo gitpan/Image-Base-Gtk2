@@ -28,7 +28,7 @@ use Image::Base::Gtk2::Gdk::Drawable;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 6;
+our $VERSION = 7;
 
 sub new {
   my ($class, %params) = @_;
@@ -84,7 +84,7 @@ sub set {
   ### Image-GdkImage set(): \%params
 
   %$self = (%$self, %params);
-  
+
   if (defined (my $colormap = delete $self->{'-colormap'})) {
     $self->{'-gdkimage'}->set_colormap ($colormap);
   }
@@ -156,7 +156,7 @@ sub pixel_to_colour {
 1;
 __END__
 
-=for stopwords undef Ryde Gdk Images GdkImage colormap ie toplevel
+=for stopwords undef Ryde Gdk Images GdkImage colormap ie toplevel Gtk Pango pixmap
 
 =head1 NAME
 
