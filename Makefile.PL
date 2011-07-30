@@ -32,9 +32,10 @@ MyMakeMakerExtras::WriteMakefile
    LICENSE      => 'gpl',
    SIGN         => 1,
    PREREQ_PM    => {
-                    # actually only pixbuf goes up to Image::Base ellipse(),
+                    # actually only pixbuf uses Image::Base ellipse(),
                     # but it's not too terrible to ask for it always
                     'Image::Base' => '1.12', # for ellipse() $fill
+
                     'Gtk2' => 0,
                    },
    MIN_PERL_VERSION => '5.008',
@@ -46,7 +47,7 @@ MyMakeMakerExtras::WriteMakefile
      optional_features =>
      { maximum_tests =>
        { description => 'Have "make test" do as much as possible.',
-         requires => { 'Test::NoWarnings' => 0,
+         requires => { 'Test::Weaken' => '2.000',
                      },
        },
      },

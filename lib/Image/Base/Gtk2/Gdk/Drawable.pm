@@ -28,7 +28,7 @@ our @ISA = ('Image::Base');
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 7;
+our $VERSION = 8;
 
 sub new {
   my ($class, %params) = @_;
@@ -211,6 +211,47 @@ sub ellipse {
                            $x1, $y1,
                            $x2-$x1, $y2-$y1,
                            0, 360*64);  # angles in 64ths of a 360 degrees
+    }
+  }
+}
+
+sub diamond {
+  my ($self, $x1, $y1, $x2, $y2, $colour, $fill) = @_;
+  ### Image-Gtk2GdkDrawable diamond: "$x1, $y1, $x2, $y2, $colour, ".($fill?1:0)
+  my $drawable = $self->{'-drawable'};
+  my $gc = $self->gc_for_colour($colour);
+
+  if ($x1==$x2 && $y1==$y2) {
+    # 1x1 polygon draws nothing, do it as a point instead
+    $drawable->draw_point ($gc, $x1,$y1);
+
+  } else {
+    my $xh = ($x2 - $x1 + 1);
+    my $yh = ($y2 - $y1 + 1);
+    my $xeven = ! ($xh & 1);
+    my $yeven = ! ($yh & 1);
+    $xh = int($xh / 2);
+    $yh = int($yh / 2);
+    my @points = ($x1+$xh, $y1,  # top centre
+
+                  # left
+                  $x1, $y1+$yh,
+                  ($yeven ? ($x1, $y2-$yh) : ()),
+
+                  # bottom
+                  $x1+$xh, $y2,
+                  ($xeven ? ($x2-$xh, $y2) : ()),
+
+                  # right
+                  ($yeven ? ($x2, $y2-$yh) : ()),
+                  $x2, $y1+$yh,
+
+                  ($xeven ? ($x2-$xh, $y1) : ()),
+                  $x1+$xh, $y1);  # back to start
+    foreach my $fillarg (0 .. !!$fill) {
+      $drawable->draw_polygon ($gc,
+                               $fillarg,
+                               @points);
     }
   }
 }

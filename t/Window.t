@@ -40,7 +40,7 @@ diag "Image::Base version ", Image::Base->VERSION;
 #------------------------------------------------------------------------------
 # VERSION
 
-my $want_version = 7;
+my $want_version = 8;
 is ($Image::Base::Gtk2::Gdk::Window::VERSION,
     $want_version, 'VERSION variable');
 is (Image::Base::Gtk2::Gdk::Window->VERSION,

@@ -23,7 +23,7 @@ use warnings;
 use Carp;
 use base 'Image::Base::Gtk2::Gdk::Drawable';
 
-our $VERSION = 7;
+our $VERSION = 8;
 
 1;
 __END__

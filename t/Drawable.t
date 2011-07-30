@@ -31,15 +31,29 @@ Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
 Gtk2->init_check
   or plan skip_all => 'due to no DISPLAY available';
 
-plan tests => 2976;
+plan tests => 4408;
 
 use_ok ('Image::Base::Gtk2::Gdk::Drawable');
 diag "Image::Base version ", Image::Base->VERSION;
+MyTestHelpers::glib_gtk_versions();
+
+if (! eval { require X11::Protocol; 1 }) {
+  diag "No X11::Protocol for server info";
+} else {
+  my $display_name = Gtk2::Gdk->get_display;
+  my $X = eval { X11::Protocol->new($display_name) };
+  if (! $X) {
+    diag "Cannot open display for server info: $@";
+  } else {
+    MyTestHelpers::X11_server_info($X);
+  }
+}
+
 
 #------------------------------------------------------------------------------
 # VERSION
 
-my $want_version = 7;
+my $want_version = 8;
 is ($Image::Base::Gtk2::Gdk::Drawable::VERSION,
     $want_version, 'VERSION variable');
 is (Image::Base::Gtk2::Gdk::Drawable->VERSION,
@@ -203,9 +217,11 @@ ok (! eval { Image::Base::Gtk2::Gdk::Drawable->VERSION($check_version); 1 },
   $pixmap->set_colormap (Gtk2::Gdk->get_default_root_window->get_colormap);
   my $image = Image::Base::Gtk2::Gdk::Drawable->new
     (-drawable => $pixmap);
+
   local $MyTestImageBase::white = 'white';
   local $MyTestImageBase::black = 'black';
   MyTestImageBase::check_image ($image);
+  MyTestImageBase::check_diamond ($image);
 }
 
 exit 0;

@@ -29,7 +29,7 @@ BEGIN { MyTestHelpers::nowarnings() }
 require Image::Base::Gtk2::Gdk::Pixbuf;
 diag "Image::Base version ", Image::Base->VERSION;
 
-plan tests => 1549;
+plan tests => 1996;
 
 my $have_File_Temp = eval { require File::Temp; 1 };
 if (! $have_File_Temp) {
@@ -39,7 +39,7 @@ if (! $have_File_Temp) {
 #------------------------------------------------------------------------------
 # VERSION
 
-my $want_version = 7;
+my $want_version = 8;
 is ($Image::Base::Gtk2::Gdk::Pixbuf::VERSION,
     $want_version, 'VERSION variable');
 is (Image::Base::Gtk2::Gdk::Pixbuf->VERSION,

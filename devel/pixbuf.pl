@@ -26,6 +26,23 @@ use Smart::Comments;
 
 
 {
+  # jpeg compression on save()
+  #
+  require Image::Base::Gtk2::Gdk::Pixbuf;
+  my $image = Image::Base::Gtk2::Gdk::Pixbuf->new
+    (-width => 200, -height => 100,
+     -file_format => 'jpeg');
+  $image->ellipse (1,1, 100,50, 'green');
+  $image->ellipse (100,50, 199,99, 'orange');
+  $image->line (1,99, 199,0, 'red');
+  $image->set (-quality_percent => 1);
+  $image->save ('/tmp/x-001.jpeg');
+  $image->set (-quality_percent => 100);
+  $image->save ('/tmp/x-100.jpeg');
+  system "ls -l /tmp/x*";
+  exit 0;
+}
+{
   my @formats = Gtk2::Gdk::Pixbuf->get_formats;
   # ### @formats
   # @formats = grep {$_->{'is_writable'}} @formats;

@@ -16,6 +16,10 @@ You can get a copy of the GNU General Public License online at
 <http://www.gnu.org/licenses/>.
 
 
+Version 8, July 2011
+    - new -quality_percent option for JPEG
+    - Drawable diamond() using draw_polygon
+
 Version 7, June 2011
     - Pixbuf fix blue/green wrong way around!
 

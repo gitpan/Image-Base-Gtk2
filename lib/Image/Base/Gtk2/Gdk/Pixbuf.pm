@@ -28,7 +28,7 @@ use Carp;
 use Gtk2;
 use Image::Base 1.12; # version 1.12 for ellipse() $fill
 
-our $VERSION = 7;
+our $VERSION = 8;
 our @ISA = ('Image::Base');
 
 # uncomment this to run the ### lines
@@ -194,6 +194,10 @@ sub save {
     if (Gtk2->check_version(2,8,0)
         && defined (my $zlib_compression = $self->get('-zlib_compression'))) {
       @options = (compress => $zlib_compression)
+    }
+  } elsif ($file_format eq 'jpeg') {
+    if (defined (my $quality = $self->get('-quality_percent'))) {
+      @options = (quality => $quality)
     }
   } elsif ($file_format eq 'ico') {
     if (defined (my $x_hot = $self->get('-hotx'))) {
@@ -372,14 +376,16 @@ written, and in recent Gtk also TIFF, ICO and BMP.  Many further formats can
 be read but not written, including XPM, GIF, XBM and PCX.
 
 Pixbufs are held in client-side memory and don't require an X server or
-C<< Gtk2->init >>, which means they can be used for general-purpose image
+C<< Gtk2->init() >>, which means they can be used for general-purpose image
 and image file manipulations.
 
 The current drawing code is not very fast, but if you've got some pixel
 twiddling in C<Image::Base> style then this is a handy way to have it read
 or write several file formats.
 
-Colour names are anything recognised by C<< Gtk2::Gdk::Color->parse >>,
+=head2 Colour Names
+
+Colour names are anything recognised by C<< Gtk2::Gdk::Color->parse() >>,
 which means various names like "pink" plus hex #RRGGBB or #RRRRGGGGBBB.  As
 of Gtk 2.20 the names are from the Pango compiled-in copy of the X11
 F<rgb.txt>.  Special colour "None" means a transparent pixel on a pixbuf
@@ -469,10 +475,22 @@ The size of a pixbuf cannot be changed once created.
 Whether the underlying pixbuf has a alpha channel, meaning a transparency
 mask (or partial transparency).  This cannot be changed once created.
 
+=item C<-quality_percent> (0 to 100 or C<undef>)
+
+The image quality when saving to JPEG format.  JPEG compresses by reducing
+colours and resolution in ways that are not too noticeable to the human eye.
+100 means full quality, no such reductions.  C<undef> means the GdkPixbuf
+default, which is 75.
+
+This becomes the C<quality> parameter to C<$pixbuf-E<gt>save()>.
+
 =item C<-zlib_compression> (integer, no default)
 
-The Zlib compression level to use when saving.  This is used if applicable
-(only "png" format currently) and if possible (which means Gtk 2.8.0 up).
+The Zlib compression level to use when saving.
+
+This becomes the C<compress> parameter to C<$pixbuf-E<gt>save()> if
+applicable (only "png" format currently) and if possible (which means Gtk
+2.8.0 up).
 
 =item C<-hotx> (integer or undef, default undef)
 
