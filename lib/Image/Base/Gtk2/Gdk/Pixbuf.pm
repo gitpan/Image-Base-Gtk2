@@ -28,7 +28,7 @@ use Carp;
 use Gtk2;
 use Image::Base 1.12; # version 1.12 for ellipse() $fill
 
-our $VERSION = 8;
+our $VERSION = 9;
 our @ISA = ('Image::Base');
 
 # uncomment this to run the ### lines
@@ -425,7 +425,7 @@ C<-has_alpha>,
                   -height    => 10,
                   -has_alpha => 1);
 
-=item C<< $image->load >>
+=item C<< $image->load () >>
 
 =item C<< $image->load ($filename) >>
 
@@ -434,7 +434,7 @@ creates and sets a new underlying C<-pixbuf> because it's not possible to
 read into an existing pixbuf object, only read a new one.  C<-file_format>
 is set from the loaded file's format.
 
-=item C<< $image->save >>
+=item C<< $image->save () >>
 
 =item C<< $image->save ($filename) >>
 

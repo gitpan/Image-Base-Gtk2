@@ -16,6 +16,9 @@ You can get a copy of the GNU General Public License online at
 <http://www.gnu.org/licenses/>.
 
 
+Version 9, August 2011
+    - fix Drawable ellipse() use rectangle for 2 wide or high
+
 Version 8, July 2011
     - new -quality_percent option for JPEG
     - Drawable diamond() using draw_polygon

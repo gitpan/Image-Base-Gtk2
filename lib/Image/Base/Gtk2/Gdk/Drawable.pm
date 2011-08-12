@@ -28,7 +28,7 @@ our @ISA = ('Image::Base');
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 8;
+our $VERSION = 9;
 
 sub new {
   my ($class, %params) = @_;
@@ -202,14 +202,16 @@ sub ellipse {
   ### Image-Gtk2GdkDrawable ellipse: "$x1, $y1, $x2, $y2, $colour, ".($fill?1:0)
   my $drawable = $self->{'-drawable'};
   my $gc = $self->gc_for_colour($colour);
-  if ($x1 == $x2 && $y1 == $y2) {
-    $drawable->draw_point ($gc, $x1,$y1);
+  my $w = $x2 - $x1;
+  my $h = $y2 - $y1;
+  if ($w <= 1 || $h <= 1) {
+    # 1 or 2 pixels high or wide
+    $self->{'-drawable'}->draw_rectangle ($gc, 1,  # filled
+                                          $x1, $y1, $w+1, $h+1);
   } else {
     foreach my $fillarg (0 .. !!$fill) {
-      $drawable->draw_arc ($gc,
-                           $fillarg,
-                           $x1, $y1,
-                           $x2-$x1, $y2-$y1,
+      $drawable->draw_arc ($gc, $fillarg,
+                           $x1, $y1, $w, $h,
                            0, 360*64);  # angles in 64ths of a 360 degrees
     }
   }

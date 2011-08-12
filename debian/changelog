@@ -1,5 +1,5 @@
-libimage-base-gtk2-perl (8-1) unstable; urgency=low
+libimage-base-gtk2-perl (9-1) unstable; urgency=low
 
   * Packaged version.
 
- -- Kevin Ryde <user42@zip.com.au>  Sat, 30 Jul 2011 11:40:56 +1000
+ -- Kevin Ryde <user42@zip.com.au>  Sat, 13 Aug 2011 07:54:28 +1000
