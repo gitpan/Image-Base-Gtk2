@@ -28,7 +28,7 @@ our @ISA = ('Image::Base');
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 9;
+our $VERSION = 10;
 
 sub new {
   my ($class, %params) = @_;
@@ -228,12 +228,15 @@ sub diamond {
     $drawable->draw_point ($gc, $x1,$y1);
 
   } else {
-    my $xh = ($x2 - $x1 + 1);
-    my $yh = ($y2 - $y1 + 1);
-    my $xeven = ! ($xh & 1);
-    my $yeven = ! ($yh & 1);
+    my $xh = ($x2 - $x1);
+    my $yh = ($y2 - $y1);
+    my $xeven = ($xh & 1);
+    my $yeven = ($yh & 1);
     $xh = int($xh / 2);
     $yh = int($yh / 2);
+    ### assert: $x1+$xh+$xeven == $x2-$xh
+    ### assert: $y1+$yh+$yeven == $y2-$yh
+
     my @points = ($x1+$xh, $y1,  # top centre
 
                   # left

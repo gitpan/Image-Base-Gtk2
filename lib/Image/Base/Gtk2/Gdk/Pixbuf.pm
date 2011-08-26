@@ -28,7 +28,7 @@ use Carp;
 use Gtk2;
 use Image::Base 1.12; # version 1.12 for ellipse() $fill
 
-our $VERSION = 9;
+our $VERSION = 10;
 our @ISA = ('Image::Base');
 
 # uncomment this to run the ### lines

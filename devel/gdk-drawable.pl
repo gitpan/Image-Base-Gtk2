@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2010 Kevin Ryde
+# Copyright 2010, 2011 Kevin Ryde
 
 # This file is part of Image-Base-Gtk2.
 #
@@ -23,6 +23,36 @@ use warnings;
 use Gtk2 '-init';
 
 use Smart::Comments;
+
+
+{
+  require Gtk2;
+  require Image::Base::Gtk2::Gdk::Window;
+  Gtk2->init;
+  my $win = Gtk2::Gdk::Window->new (undef, { window_type => 'temp',
+                                             x => 800, y => 100,
+                                             width => 50, height => 25,
+                                           });
+  $win->show;
+  $win->raise;
+  $win->get_display->flush;
+  sleep 1;
+  my $image = Image::Base::Gtk2::Gdk::Window->new
+    (-window => $win);
+  $image->rectangle (0,0, 49,24, 'black', 1);
+
+  $image->diamond (1,1,6,6, 'white');
+  $image->diamond (11,1,16,6, 'white', 1);
+  $image->diamond (1,10,7,16, 'white');
+  $image->diamond (11,10,17,16, 'white', 1);
+  $win->get_display->flush;
+  sleep 1;
+
+  my $window = $image->get('-drawable');
+  print "id ",$window->XID,"\n";
+  system ("xwd -id ".$window->XID." >/tmp/x.xwd && convert /tmp/x.xwd /tmp/x.xpm && cat /tmp/x.xpm");
+  exit 0;
+}
 
 {
   require Image::Base::Gtk2::Gdk::Drawable;

@@ -53,7 +53,7 @@ if (! eval { require X11::Protocol; 1 }) {
 #------------------------------------------------------------------------------
 # VERSION
 
-my $want_version = 9;
+my $want_version = 10;
 is ($Image::Base::Gtk2::Gdk::Drawable::VERSION,
     $want_version, 'VERSION variable');
 is (Image::Base::Gtk2::Gdk::Drawable->VERSION,
