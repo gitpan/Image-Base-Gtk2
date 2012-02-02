@@ -1,4 +1,4 @@
-# Copyright 2010, 2011 Kevin Ryde
+# Copyright 2010, 2011, 2012 Kevin Ryde
 
 # This file is part of Image-Base-Gtk2.
 #
@@ -20,10 +20,12 @@ package Image::Base::Gtk2::Gdk::Window;
 use 5.008;
 use strict;
 use warnings;
-use Carp;
-use base 'Image::Base::Gtk2::Gdk::Drawable';
 
-our $VERSION = 10;
+use vars '$VERSION','@ISA';
+$VERSION = 11;
+
+use Image::Base::Gtk2::Gdk::Drawable;
+@ISA = ('Image::Base::Gtk2::Gdk::Drawable');
 
 1;
 __END__
@@ -125,6 +127,9 @@ C<Image::Base::Gtk2::Gdk::Drawable> does.
 
 =head1 FUNCTIONS
 
+See L<Image::Base::Gtk2::Gdk::Drawable/FUNCTIONS> and
+L<Image::Base/FUNCTIONS> for the behaviour inherited from the superclasses.
+
 =over 4
 
 =item C<$image = Image::Base::Gtk2::Gdk::Window-E<gt>new (key=E<gt>value,...)>
@@ -168,7 +173,7 @@ L<http://user42.tuxfamily.org/image-base-gtk2/index.html>
 
 =head1 LICENSE
 
-Copyright 2010, 2011 Kevin Ryde
+Copyright 2010, 2011, 2012 Kevin Ryde
 
 Image-Base-Gtk2 is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the Free

@@ -1,4 +1,4 @@
-Copyright 2010, 2011 Kevin Ryde
+Copyright 2010, 2011, 2012 Kevin Ryde
 
 This file is part of Image-Base-Gtk2.
 
@@ -16,6 +16,9 @@ You can get a copy of the GNU General Public License online at
 <http://www.gnu.org/licenses/>.
 
 
+
+Version 11, February 2012
+    - Pixbuf,Image clip drawing to 0,0,width,height
 
 Version 10, August 2011
     - fix Drawable diamond() coordinates

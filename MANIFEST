@@ -9,10 +9,10 @@ debian/source/format
 debian/watch
 devel/ellipse-tangent.pl
 devel/ellipse.pl
+devel/exe-misc.c
 devel/gdk-drawable.pl
 devel/gdk-image.pl
 devel/Makefile
-devel/misc.c
 devel/pixbuf-get-pixels.pl
 devel/pixbuf.pl
 devel/unused.pl

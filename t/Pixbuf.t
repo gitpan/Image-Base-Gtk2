@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2010, 2011 Kevin Ryde
+# Copyright 2010, 2011, 2012 Kevin Ryde
 
 # This file is part of Image-Base-Gtk2.
 #
@@ -26,10 +26,13 @@ use lib 't';
 use MyTestHelpers;
 BEGIN { MyTestHelpers::nowarnings() }
 
+# uncomment this to run the ### lines
+#use Smart::Comments;
+
 require Image::Base::Gtk2::Gdk::Pixbuf;
 diag "Image::Base version ", Image::Base->VERSION;
 
-plan tests => 1996;
+plan tests => 2002;
 
 my $have_File_Temp = eval { require File::Temp; 1 };
 if (! $have_File_Temp) {
@@ -39,7 +42,7 @@ if (! $have_File_Temp) {
 #------------------------------------------------------------------------------
 # VERSION
 
-my $want_version = 10;
+my $want_version = 11;
 is ($Image::Base::Gtk2::Gdk::Pixbuf::VERSION,
     $want_version, 'VERSION variable');
 is (Image::Base::Gtk2::Gdk::Pixbuf->VERSION,
@@ -51,6 +54,34 @@ my $check_version = $want_version + 1000;
 ok (! eval { Image::Base::Gtk2::Gdk::Pixbuf->VERSION($check_version); 1 },
     "VERSION class check $check_version");
 
+
+#------------------------------------------------------------------------------
+# rectangle()
+
+{
+  my $image = Image::Base::Gtk2::Gdk::Pixbuf->new
+    (-width  => 20,
+     -height => 10);
+  $image->rectangle (0,0, 19,9, 'black', 1);
+  ### Pixbuf.t rectangle() filled 0,0 2,2 ...
+  $image->rectangle (0,0, 2,2, '#FFFFFF', 1);
+  is ($image->xy (0,0), '#FFFFFF');
+  is ($image->xy (1,1), '#FFFFFF');
+  is ($image->xy (2,1), '#FFFFFF');
+  is ($image->xy (3,3), '#000000');
+}
+{
+  my $image = Image::Base::Gtk2::Gdk::Pixbuf->new
+    (-width  => 20,
+     -height => 10);
+  $image->rectangle (0,0, 19,9, 'black', 1);
+  ### Pixbuf.t rectangle() unfilled 5,5 7,7 ...
+  $image->rectangle (5,5, 7,7, 'white', 0);
+  is ($image->xy (5,5), '#FFFFFF', 'rectangle() draw 5,5');
+  is ($image->xy (6,6), '#000000');
+  is ($image->xy (7,6), '#FFFFFF');
+  is ($image->xy (8,8), '#000000');
+}
 
 #------------------------------------------------------------------------------
 # new() -pixbuf
@@ -138,8 +169,8 @@ static char *x[] = {
 HERE
   my $image = Image::Base::Gtk2::Gdk::Pixbuf->new (-width => 1, -height => 1);
   $image->load_string ($str);
-  is ($image->get('-width'),  2, 'get() xpm -hotx');
-  is ($image->get('-height'), 3, 'get() xpm -hoty');
+  is ($image->get('-width'),  2, 'get() xpm -width');
+  is ($image->get('-height'), 3, 'get() xpm -height');
  SKIP: {
     if (Gtk2->check_version(2,2,0)) {
       skip 'XPM x_hot, y_hot new in Gtk 2.2', 6;
@@ -308,7 +339,7 @@ foreach my $has_alpha (0, 1) {
   is ($image->xy (5,6), '#000000');
   is ($image->xy (6,6), '#FFFFFF');
   is ($image->xy (7,7), '#FFFFFF');
-  is ($image->xy (8,8), '#000000');
+  is ($image->xy (8,8), '#000000', 'line not 8,8');
 }
 {
   my $pixbuf = Gtk2::Gdk::Pixbuf->new ('rgb',  # colorspace
@@ -323,33 +354,7 @@ foreach my $has_alpha (0, 1) {
   is ($image->xy (0,0), '#FFFFFF');
   is ($image->xy (1,1), '#FFFFFF');
   is ($image->xy (2,1), '#000000');
-  is ($image->xy (3,3), '#000000');
-}
-
-#------------------------------------------------------------------------------
-# rectangle
-
-{
-  my $image = Image::Base::Gtk2::Gdk::Pixbuf->new
-    (-width  => 20,
-     -height => 10);
-  $image->rectangle (0,0, 19,9, 'black', 1);
-  $image->rectangle (5,5, 7,7, 'white', 0);
-  is ($image->xy (5,5), '#FFFFFF');
-  is ($image->xy (6,6), '#000000');
-  is ($image->xy (7,6), '#FFFFFF');
-  is ($image->xy (8,8), '#000000');
-}
-{
-  my $image = Image::Base::Gtk2::Gdk::Pixbuf->new
-    (-width  => 20,
-     -height => 10);
-  $image->rectangle (0,0, 19,9, 'black', 1);
-  $image->rectangle (0,0, 2,2, '#FFFFFF', 1);
-  is ($image->xy (0,0), '#FFFFFF');
-  is ($image->xy (1,1), '#FFFFFF');
-  is ($image->xy (2,1), '#FFFFFF');
-  is ($image->xy (3,3), '#000000');
+  is ($image->xy (3,3), '#000000', 'line() not 3,3');
 }
 
 #------------------------------------------------------------------------------

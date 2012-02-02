@@ -1,4 +1,4 @@
-# Copyright 2010, 2011 Kevin Ryde
+# Copyright 2010, 2011, 2012 Kevin Ryde
 
 # This file is part of Image-Base-Gtk2.
 #
@@ -28,7 +28,7 @@ our @ISA = ('Image::Base');
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 10;
+our $VERSION = 11;
 
 sub new {
   my ($class, %params) = @_;
@@ -42,18 +42,17 @@ sub new {
 
 my %attr_to_get_method = (-colormap => 'get_colormap',
                           -depth    => 'get_depth',
-                          -screen   => 'get_screen');
+                          -screen   => 'get_screen',
+                          # no get_width method or property, just
+                          # get_size()
+                          -width  => sub { ($_[0]->get_size)[0] },
+                          -height => sub { ($_[0]->get_size)[1] },
+                         );
 sub _get {
   my ($self, $key) = @_;
 
   if (my $method = $attr_to_get_method{$key}) {
     return $self->{'-drawable'}->$method;
-  }
-  if ($key eq '-width') {   # no get_width method or property, just get_size
-    return ($self->{'-drawable'}->get_size)[0];
-  }
-  if ($key eq '-height') {  # no get_height method or property, just get_size
-    return ($self->{'-drawable'}->get_size)[1];
   }
 
   if ($key eq '-pixmap' || $key eq '-window') {  # aliasing
@@ -107,13 +106,29 @@ sub set {
   ### set leaves: $self
 }
 
+#------------------------------------------------------------------------------
+# drawing
+
 sub xy {
   my ($self, $x, $y, $colour) = @_;
+
   if (@_ >= 4) {
     ### Image-Gtk2GdkDrawable xy: "$x, $y, $colour"
     $self->{'-drawable'}->draw_point ($self->gc_for_colour($colour), $x, $y);
+
   } else {
     # fetch using Pixbuf as it looks up colours
+
+    if ($x < 0 || $y < 0) {
+      ### get_from_drawable() won't read negative points ...
+      return undef; # fetch or store
+    }
+    my $drawable = $self->{'-drawable'};
+    my ($width, $height) = $drawable->get_size;
+    if ($x >= $width || $y >= $height) {
+      ### get_from_drawable() won't read outside drawable size ...
+      return undef;
+    }
 
     # $drawable->get_image would be an alternative, giving the full 16-bit
     # GdkColor components, but Gtk2::Gdk::Image data not accessible as of
@@ -122,7 +137,6 @@ sub xy {
                                          0,   # has alpha
                                          8,   # bits per sample
                                          1,1);
-    my $drawable = $self->{'-drawable'};
     $pixbuf->get_from_drawable ($self->{'-drawable'}, undef, $x,$y, 0,0, 1,1);
     ### pixbuf get_pixels: length($pixbuf->get_pixels), $pixbuf->get_pixels
     my @rgb = unpack('CCC', $pixbuf->get_pixels);
@@ -178,6 +192,7 @@ sub line {
 sub rectangle {
   my ($self, $x1, $y1, $x2, $y2, $colour, $fill) = @_;
   # ### Image-Gtk2GdkDrawable rectangle: "$x1, $y1, $x2, $y2, $colour, $fill"
+
   $fill = !! $fill;
   $fill ||= ($x1 == $x2 || $y1 == $y2);
   $self->{'-drawable'}->draw_rectangle ($self->gc_for_colour($colour), $fill,
@@ -304,9 +319,9 @@ sub colour_to_colorobj {
   my $colormap = $drawable->get_colormap;
   if (! $colormap) {
     if ($drawable->get_depth == 1) {
-      if ($colour =~ /^#(000000)+$/) {
+      if ($colour =~ /^#(000)+$/) {
         return Gtk2::Gdk::Color->new (0,0,0, 0);
-      } elsif ($colour  =~ /^#(FFFFFF)+$/i) {
+      } elsif ($colour  =~ /^#(FFF)+$/i) {
         return Gtk2::Gdk::Color->new (0,0,0, 1);
       }
     }
@@ -372,6 +387,9 @@ image file and only displaying when complete.  See C<Image::Base::Multiplex>
 for a way to do both simultaneously.
 
 =head1 FUNCTIONS
+
+See L<Image::Base/FUNCTIONS> for the behaviour common to all Image-Base
+classes.
 
 =over 4
 
@@ -447,7 +465,7 @@ L<http://user42.tuxfamily.org/image-base-gtk2/index.html>
 
 =head1 LICENSE
 
-Copyright 2010, 2011 Kevin Ryde
+Copyright 2010, 2011, 2012 Kevin Ryde
 
 Image-Base-Gtk2 is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the Free

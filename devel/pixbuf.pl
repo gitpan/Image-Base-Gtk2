@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2010, 2011 Kevin Ryde
+# Copyright 2010, 2011, 2012 Kevin Ryde
 
 # This file is part of Image-Base-Gtk2.
 #
@@ -25,6 +25,40 @@ use Gtk2;
 use Smart::Comments;
 
 
+{
+  # rectangle off-screen
+  require Image::Base::Gtk2::Gdk::Pixbuf;
+  my $image = Image::Base::Gtk2::Gdk::Pixbuf->new
+    (-width => 50, -height => 20,
+     -file_format => 'png');
+  $image->rectangle (0,0, 49,29, 'black',1);
+
+  $image->rectangle (-10,-10,6,6, 'white',1);
+
+  $image->save('/tmp/x.png');
+  system ("convert  -monochrome /tmp/x.png /tmp/x.xpm && cat /tmp/x.xpm");
+  exit 0;
+}
+
+{
+  my $data = "\x{FF}\x{FF}\x{FF}\x{FF}";
+  my $pixbuf = Gtk2::Gdk::Pixbuf->new_from_data
+    ($data x 100,
+     'rgb', # colorspace
+     1,     # has_alpha
+     8,     # bits per sample
+     10,10,   # width,height
+     2);   # rowstride
+  ### $pixbuf
+  ### pixels: $pixbuf->get_pixels
+  ### rowstride: $pixbuf->get_rowstride
+
+  my $pspec = $pixbuf->find_property('rowstride');
+  ### $pspec
+  ### min: $pspec->get_minimum
+
+  exit 0;
+}
 {
   # jpeg compression on save()
   #

@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2010, 2011 Kevin Ryde
+# Copyright 2010, 2011, 2012 Kevin Ryde
 
 # This file is part of Image-Base-Gtk2.
 #
@@ -31,7 +31,7 @@ Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
 Gtk2->init_check
   or plan skip_all => 'due to no DISPLAY available';
 
-plan tests => 4408;
+plan tests => 4420;
 
 use_ok ('Image::Base::Gtk2::Gdk::Drawable');
 diag "Image::Base version ", Image::Base->VERSION;
@@ -53,7 +53,7 @@ if (! eval { require X11::Protocol; 1 }) {
 #------------------------------------------------------------------------------
 # VERSION
 
-my $want_version = 10;
+my $want_version = 11;
 is ($Image::Base::Gtk2::Gdk::Drawable::VERSION,
     $want_version, 'VERSION variable');
 is (Image::Base::Gtk2::Gdk::Drawable->VERSION,

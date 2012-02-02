@@ -1,4 +1,4 @@
-# Copyright 2010, 2011 Kevin Ryde
+# Copyright 2010, 2011, 2012 Kevin Ryde
 
 # This file is part of Image-Base-Gtk2.
 #
@@ -26,7 +26,7 @@ use base 'Image::Base::Gtk2::Gdk::Drawable';
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 10;
+our $VERSION = 11;
 
 sub new {
   my ($class, %params) = @_;
@@ -183,6 +183,9 @@ This class adds some pixmap creation help.
 
 =head1 FUNCTIONS
 
+See L<Image::Base::Gtk2::Gdk::Drawable/FUNCTIONS> and
+L<Image::Base/FUNCTIONS> for the behaviour inherited from the superclasses.
+
 =over 4
 
 =item C<$image = Image::Base::Gtk2::Gdk::Pixmap-E<gt>new (key=E<gt>value,...)>
@@ -268,7 +271,7 @@ L<http://user42.tuxfamily.org/image-base-gtk2/index.html>
 
 =head1 LICENSE
 
-Copyright 2010, 2011 Kevin Ryde
+Copyright 2010, 2011, 2012 Kevin Ryde
 
 Image-Base-Gtk2 is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the Free

@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2010, 2011 Kevin Ryde
+# Copyright 2010, 2011, 2012 Kevin Ryde
 
 # This file is part of Image-Base-Gtk2.
 #
@@ -34,7 +34,7 @@ Gtk2->init_check
 eval { Gtk2->VERSION(1.240); 1 }
   or plan skip_all => 'due to Gtk2-Perl '.Gtk2->VERSION.', no full GdkImage until 1.240';
 
-plan tests => 1541;
+plan tests => 1959;
 
 use_ok ('Image::Base::Gtk2::Gdk::Image');
 diag "Image::Base version ", Image::Base->VERSION;
@@ -42,7 +42,7 @@ diag "Image::Base version ", Image::Base->VERSION;
 #------------------------------------------------------------------------------
 # VERSION
 
-my $want_version = 10;
+my $want_version = 11;
 is ($Image::Base::Gtk2::Gdk::Image::VERSION,
     $want_version, 'VERSION variable');
 is (Image::Base::Gtk2::Gdk::Image->VERSION,

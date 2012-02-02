@@ -1,4 +1,4 @@
-# Copyright 2010, 2011 Kevin Ryde
+# Copyright 2010, 2011, 2012 Kevin Ryde
 
 # This file is part of Image-Base-Gtk2.
 #
@@ -16,23 +16,21 @@
 # with Image-Base-Gtk2.  If not, see <http://www.gnu.org/licenses/>.
 
 
-# A -quality_percent could set quality=> on save().
-# cf Image::Base::Prima::Image and Image::Base::Imager might have similar.
-
-
 package Image::Base::Gtk2::Gdk::Pixbuf;
 use 5.008;
 use strict;
 use warnings;
 use Carp;
 use Gtk2;
+use List::Util 'min','max';
 use Image::Base 1.12; # version 1.12 for ellipse() $fill
 
-our $VERSION = 10;
+our $VERSION = 11;
 our @ISA = ('Image::Base');
 
 # uncomment this to run the ### lines
 #use Smart::Comments;
+
 
 sub new {
   my ($class, %params) = @_;
@@ -224,10 +222,22 @@ sub _filename_to_format {
   }
 }
 
+#------------------------------------------------------------------------------
+# drawing
+
 sub xy {
   my ($self, $x, $y, $colour) = @_;
 
   my $pixbuf = $self->{'-pixbuf'};
+
+  unless ($x >= 0
+          && $y >= 0
+          && $x < $pixbuf->get_width
+          && $y < $pixbuf->get_height) {
+    ### outside 0,0,width,height ...
+    return undef;  # fetch or store
+  }
+
   if (@_ >= 4) {
     ### Image-GdkPixbuf xy: "$x, $y, $colour"
     my $data;
@@ -290,16 +300,35 @@ sub line {
 
 sub rectangle {
   my ($self, $x1,$y1, $x2,$y2, $colour, $fill) = @_;
-  ### rectangle(): "$x1,$y1, $x2,$y2, $colour, ".($fill||0)
+  ### Pixbuf rectangle(): "$x1,$y1, $x2,$y2, $colour, ".($fill||0)
 
-  if ($x1 > $x2) { ($x1,$x2) = ($x2,$x1) }   # swap
-  if ($y1 > $y2) { ($y1,$y2) = ($y2,$y1) }   # swap
+  # sort coordinates as they could be the wrong way around from line()
+  ($x1,$x2) = (min($x1,$x2), max($x1,$x2));
+  ($y1,$y2) = (min($y1,$y2), max($y1,$y2));
 
-  my $w = $x2 - $x1 + 1;
-  my $h = $y2 - $y1 + 1;
-  if ($fill || $w == 1 || $h == 1) {
-    # solid block
-    my $pixbuf = $self->{'-pixbuf'};
+  my $pixbuf = $self->{'-pixbuf'};
+  my $pixbuf_width = $pixbuf->get_width;
+  my $pixbuf_height = $pixbuf->get_height;
+
+  unless ($x2 >= 0
+          && $y2 >= 0
+          && $x1 < $pixbuf_width
+          && $y1 < $pixbuf_height) {
+    ### entirely outside 0,0,width,height ...
+    return;
+  }
+
+  if ($fill || $x2-$x1 <= 1 || $y2-$y1 <= 1) {
+    ### filled rectangle by copy_area() ...
+
+    $x1 = max ($x1, 0);
+    $y1 = max ($y1, 0);
+    $x2 = min ($x2, $pixbuf_width-1);
+    $y2 = min ($y2, $pixbuf_height-1);
+
+    my $w = $x2 - $x1 + 1;
+    my $h = $y2 - $y1 + 1;
+
     my $has_alpha = $pixbuf->get_has_alpha;
     my $pixel;
     if (lc($colour) eq 'none') {
@@ -321,6 +350,7 @@ sub rectangle {
        $w,$h); # width,height
     $src_pixbuf->fill ($pixel);
 
+    ### copy_area: "to $x1,$y1  size $w,$h"
     $src_pixbuf->copy_area (0,0,   # src x,y
                             $w,$h, # src width,height
                             $pixbuf,  # dest
@@ -396,6 +426,9 @@ that Gtk 2.20 itself supports too.
 
 =head1 FUNCTIONS
 
+See L<Image::Base/FUNCTIONS> for the behaviour common to all Image-Base
+classes.
+
 =over 4
 
 =item C<< $image = Image::Base::Gtk2::Gdk::Pixbuf->new (key=>value,...) >>
@@ -404,7 +437,7 @@ Create and return a new GdkPixbuf image object.  It can be pointed at an
 existing pixbuf,
 
     $image = Image::Base::Gtk2::Gdk::Pixbuf->new
-                 (-pixbuf => $gdkimage);
+                 (-pixbuf => $gdkpixbuf);
 
 Or a file can be read,
 
@@ -527,7 +560,7 @@ L<http://user42.tuxfamily.org/image-base-gtk2/index.html>
 
 =head1 LICENSE
 
-Copyright 2010, 2011 Kevin Ryde
+Copyright 2010, 2011, 2012 Kevin Ryde
 
 Image-Base-Gtk2 is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the Free

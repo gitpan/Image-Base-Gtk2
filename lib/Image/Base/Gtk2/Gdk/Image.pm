@@ -1,4 +1,4 @@
-# Copyright 2010, 2011 Kevin Ryde
+# Copyright 2010, 2011, 2012 Kevin Ryde
 
 # This file is part of Image-Base-Gtk2.
 #
@@ -22,13 +22,12 @@ use strict;
 use warnings;
 use Carp;
 
+our $VERSION = 11;
 use base 'Image::Base';
-use Image::Base::Gtk2::Gdk::Drawable;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 10;
 
 sub new {
   my ($class, %params) = @_;
@@ -91,13 +90,26 @@ sub set {
   ### set leaves: $self
 }
 
+#------------------------------------------------------------------------------
+# drawing
+
 sub xy {
   my ($self, $x, $y, $colour) = @_;
+
+  my $gdkimage = $self->{'-gdkimage'};
+  unless ($x >= 0
+          && $y >= 0
+          && $x < $gdkimage->get_width
+          && $y < $gdkimage->get_height) {
+    ### outside 0,0,width,height ...
+    return undef;  # fetch or store
+  }
+
   if (@_ >= 4) {
     ### Image-GdkImage xy: "$x, $y, $colour"
-    $self->{'-gdkimage'}->put_pixel ($x,$y, $self->colour_to_pixel($colour));
+    $gdkimage->put_pixel ($x,$y, $self->colour_to_pixel($colour));
   } else {
-    return $self->pixel_to_colour($self->{'-gdkimage'}->get_pixel ($x,$y))
+    return $self->pixel_to_colour($gdkimage->get_pixel ($x,$y))
   }
 }
 
@@ -130,9 +142,9 @@ sub colour_to_pixel {
     return $colorobj->pixel;
   }
   if ($gdkimage->get_depth == 1) {
-    if ($colour =~ /^#(000000)+$/) {
+    if ($colour =~ /^#(000)+$/) {
       return 0;
-    } elsif ($colour  =~ /^#(FFFFFF)+$/i) {
+    } elsif ($colour  =~ /^#(FFF)+$/i) {
       return 1;
     }
   }
@@ -198,6 +210,9 @@ restricted to the depths (bits per pixel) supported the server windows and
 so isn't a general purpose pixel array.
 
 =head1 FUNCTIONS
+
+See L<Image::Base/FUNCTIONS> for the behaviour common to all Image-Base
+classes.
 
 =over 4
 
@@ -271,7 +286,7 @@ L<http://user42.tuxfamily.org/image-base-gtk2/index.html>
 
 =head1 LICENSE
 
-Copyright 2010, 2011 Kevin Ryde
+Copyright 2010, 2011, 2012 Kevin Ryde
 
 Image-Base-Gtk2 is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the Free
